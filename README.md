@@ -1,21 +1,20 @@
-# form-builder-react
+# reactjs-form-builder
 
 > React Js Form Builder
 
-[![NPM](https://img.shields.io/npm/v/form-builder-react.svg)](https://www.npmjs.com/package/form-builder-react) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/form-builder-react.svg)](https://www.npmjs.com/package/reactjs-form-builder) [![JavaScript Style Guide]
 
 ## Install
 
 ```bash
-npm install --save form-builder-react
-```
+npm install --save reactjs-form-builder
 
 ## Usage
 
 ```jsx
 import React, { Component } from 'react'
 
-import FormBuilder from 'form-builder-react'
+import FormBuilder from 'reactjs-form-builder'
 
 class Example extends Component {
   constructor(props) {
