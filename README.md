@@ -2,7 +2,7 @@
 
 > React Js Form Builder
 
-[![NPM](https://img.shields.io/npm/v/form-builder-react.svg)](https://www.npmjs.com/package/reactjs-form-builder) [![JavaScript Style Guide]
+[![NPM](https://img.shields.io/npm/v/form-builder-react.svg)](https://www.npmjs.com/package/form-builder-react) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
