@@ -8,6 +8,7 @@
 
 ```bash
 npm install --save reactjs-form-builder
+```
 
 ## Usage
 
