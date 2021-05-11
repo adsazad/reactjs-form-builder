@@ -15,12 +15,65 @@ npm install --save form-builder-react
 ```jsx
 import React, { Component } from 'react'
 
-import MyComponent from 'form-builder-react'
-import 'form-builder-react/dist/index.css'
+import FormBuilder from 'form-builder-react'
 
 class Example extends Component {
+  constructor(props) {
+    super(props);
+    this.setState({
+      form:{
+        "fields":{
+          "name":{
+            'label': "Product Name",
+            "type": "text",
+            "placeholder": true,
+            "required": true,
+            "requireMessage": "This Field is Required" // To customize message if field is empty
+          },
+          "description":{
+            'label': "Product Name",
+            "type": "textarea",
+            "required": true,
+          },
+          "categories": {
+             'label': "Categories",
+              "type": "select",
+              'options': [
+                {'label':"Apple", 'value':1},
+                {'label':"Banana", 'value':2}
+              ],
+              "placeholder": true,
+              "required": true,
+              "requireMessage": "This Field is Required"
+         },
+         'submit': {
+            "type": "submit",
+            "label": "Create Product",
+            'color:': 'btn-primary',
+          }
+        }
+      }
+    });
+  }
+  onChange(data){
+    this.setState({
+      form: data
+    });
+  }
+  onSubmit(data){
+    this.setState({
+      form: data
+    });
+    var name = this.state.form.name.value;
+    var description = this.state.form.value;
+    var category = this.state.form.value; // returns value from the options
+  }
   render() {
-    return <MyComponent />
+    return <FormBuilder
+      fields={this.state.form}
+      onChange={this.onChange.bind(this)}
+      onSubmit={this.onSubmit.bind(this)}
+    />
   }
 }
 ```
