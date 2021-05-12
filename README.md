@@ -11,7 +11,7 @@ npm install --save reactjs-form-builder
 ```
 |Field Types|   |Attributes   |
 |-----------|---|-------------|
-| Text      | type: text  | placeholder: true/false,required: true/false,requireMessage: "Custom message for require"            |
+| Text      | type: text  | placeholder: true/false,\nrequired: true/false,requireMessage: "Custom message for require"            |
 | Textarea  | type: textarea| placeholder: true/false,required: true/false,requireMessage: "Custom message for require" |
 | Select    | type: select | placeholder:true/false,options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,required: true/false,requireMessage: "Custom message for require", multiple: true/false |
 | Checkbox  | type: checkbox| placeholder:true/false, options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,required: true/false,requireMessage: "Custom message for require", multiple: true/false|
