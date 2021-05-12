@@ -10,10 +10,8 @@ class FormBuilder extends React.Component {
         this.state = {
             fields: props.fields,
         };
-        console.log(props.fields);
     }
     change(e) {
-        console.log(e.target.name);
         this.state.fields.fields[e.target.name]['value'] = e.target.value;
         this.props.onChange(this.state.fields);
     }
@@ -38,12 +36,11 @@ class FormBuilder extends React.Component {
             this.state.fields.fields[key]['errors'] = errors;
         });
         this.props.onChange(this.state.fields);
-        if(hasAnyErr == false){
+        if (hasAnyErr == false) {
             this.props.onSubmit(this.state.fields);
         }
     }
     componentDidUpdate(nextProps) {
-        console.log(nextProps);
         if (nextProps.fields != this.state.fields) {
             this.setState({
                 fields: nextProps.fields
@@ -52,14 +49,14 @@ class FormBuilder extends React.Component {
     }
     selectChange(name) {
         return function (val) {
-            this.state.fields.fields[name]['value'] = val.value;
+            this.state.fields.fields[name]['value'] = val;
             this.props.onChange(this.state.fields);
         }.bind(this);
     }
     fieldError(errors) {
         var er = "";
         if (errors != null) {
-            er = Object.entries(errors).map(([key,err]) => {
+            er = Object.entries(errors).map(([key, err]) => {
                 return (<Form.Text className="text-danger">{err}</Form.Text>)
             });
         }
@@ -76,6 +73,7 @@ class FormBuilder extends React.Component {
                             className="form-control"
                             type={value.type}
                             name={key}
+                            defaultValue={value.value != null ? value.value : ""}
                             placeholder={value.placeholder == true && value.label}
                         ></textarea>
                         {this.fieldError(value.errors)}
@@ -87,8 +85,9 @@ class FormBuilder extends React.Component {
                         <Form.Label>{value.label}</Form.Label>
                         <Select
                             name={key}
-                            placeholder={value.value}
+                            // placeholder={value.value}
                             options={value.options}
+                            value={value.value != null ? value.value : ""}
                             onChange={this.selectChange(key)}
                         />
                         {this.fieldError(value.errors)}
@@ -115,6 +114,7 @@ class FormBuilder extends React.Component {
                             onChange={this.change.bind(this)}
                             type={value.type}
                             name={key}
+                            value={value.value != null ? value.value : ""}
                             placeholder={value.placeholder == true && value.label}
                         />
                         {this.fieldError(value.errors)}
