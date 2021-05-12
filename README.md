@@ -9,6 +9,9 @@
 ```bash
 npm install --save reactjs-form-builder
 ```
+|Field Types |Attributes   |
+|------------|-------------|
+|            |             |
 
 ## Usage
 
