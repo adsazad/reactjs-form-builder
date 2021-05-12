@@ -53,6 +53,37 @@ class FormBuilder extends React.Component {
             this.props.onChange(this.state.fields);
         }.bind(this);
     }
+    radioChange(e) {
+        var name = e.target.name;
+        var fieldData = this.state.fields;
+        fieldData.fields[name]["value"] = e.target.value;
+        this.setState({
+            fields: fieldData,
+        });
+        this.props.onChange(this.state.fields);
+    }
+    checkBoxChange(e) {
+        var name = e.target.name;
+        var fieldData = this.state.fields;
+        var array = new Array();
+        array = array || [];
+        if (fieldData.fields[name]['value'] != null) {
+            array = fieldData.fields[name]["value"];
+            array = array || [];
+        }
+        console.log();
+        if (e.target.checked) {
+            array.push(e.target.value);
+        } else {
+            console.log(array.indexOf(e.target.value));
+            array.splice(array.indexOf(e.target.value), 1);
+        }
+        fieldData.fields[name]["value"] = array;
+        this.setState({
+            fields: fieldData,
+        });
+        this.props.onChange(this.state.fields);
+    }
     fieldError(errors) {
         var er = "";
         if (errors != null) {
@@ -86,6 +117,8 @@ class FormBuilder extends React.Component {
                         <Select
                             name={key}
                             // placeholder={value.value}
+                            isMulti={value.multiple != null ? value.multiple : false}
+                            autoFocus={value.autofocus != null ? value.autofocus : false}
                             options={value.options}
                             value={value.value != null ? value.value : ""}
                             onChange={this.selectChange(key)}
@@ -106,6 +139,42 @@ class FormBuilder extends React.Component {
                 );
             } else if (value.type == "submit") {
                 return (<Button type="submit" className={value.color}>{value.label}</Button>);
+            } else if (value.type == "checkbox") {
+                return (
+                    <Form.Group >
+                        {
+                            Object.entries(value.options).map(([k, v]) => {
+                                var checked = false;
+                                if (value.value != null) {
+                                    var array = value.value || [];
+                                    if (array.includes(v.value)) {
+                                        console.log(value.value);
+                                        checked = true;
+                                    }
+                                }
+                                return (<Form.Check type="checkbox" checked={checked} name={key} onChange={this.checkBoxChange.bind(this)} label={v.label} value={v.value} />);
+                            })
+                        }
+                        {this.fieldError(value.errors)}
+                    </Form.Group>
+                );
+            } else if (value.type == "radio") {
+                return (
+                    <Form.Group >
+                        {
+                            Object.entries(value.options).map(([k, v]) => {
+                                var checked = false;
+                                if (value != null) {
+                                    if (value.value == v.value) {
+                                        checked = true;
+                                    }
+                                }
+                                return (<Form.Check type="radio" name={key} checked={checked} onChange={this.radioChange.bind(this)} label={v.label} value={v.value} />);
+                            })
+                        }
+                        {this.fieldError(value.errors)}
+                    </Form.Group>
+                );
             } else {
                 return (
                     <Form.Group>
