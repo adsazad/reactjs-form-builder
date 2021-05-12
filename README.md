@@ -13,7 +13,7 @@ npm install --save reactjs-form-builder
 |-----------|---|-------------|
 | Text      | type: text  | placeholder: true/false,<br />required: true/false,<br />requireMessage: "Custom message for require"            |
 | Textarea  | type: textarea| placeholder: true/false,<br />required: true/false,<br />requireMessage: "Custom message for require" |
-| Select    | type: select | placeholder:true/false,<br />options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require", <br />multiple: true/false, autofocus: true/false |
+| Select    | type: select | placeholder:true/false,<br />options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require", <br />multiple: true/false,<br /> autofocus: true/false |
 | Checkbox  | type: checkbox| placeholder:true/false,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
 | Radio     | type: radio| placeholder:true/false,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
 ## Usage
