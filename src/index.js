@@ -142,14 +142,15 @@ class FormBuilder extends React.Component {
                     <Form.Group >
                         {
                             Object.entries(value.options).map(([k, v]) => {
-                                var checked = false;
+                                var ischecked = false;
                                 if (value.value != null) {
-                                    var array = value.value || [];
+                                    var array = value.value;
+                                    array = array || [];
                                     if (array.includes(v.value)) {
-                                        checked = true;
+                                        ischecked = true;
                                     }
                                 }
-                                return (<Form.Check type="checkbox" checked={checked} name={key} onChange={this.checkBoxChange.bind(this)} label={v.label} value={v.value} />);
+                                return (<Form.Check type="checkbox" checked={ischecked} name={key} onChange={this.checkBoxChange.bind(this)} label={v.label} value={v.value} />);
                             })
                         }
                         {this.fieldError(value.errors)}
