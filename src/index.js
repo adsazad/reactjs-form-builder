@@ -71,11 +71,9 @@ class FormBuilder extends React.Component {
             array = fieldData.fields[name]["value"];
             array = array || [];
         }
-        console.log();
         if (e.target.checked) {
             array.push(e.target.value);
         } else {
-            console.log(array.indexOf(e.target.value));
             array.splice(array.indexOf(e.target.value), 1);
         }
         fieldData.fields[name]["value"] = array;
@@ -148,7 +146,6 @@ class FormBuilder extends React.Component {
                                 if (value.value != null) {
                                     var array = value.value || [];
                                     if (array.includes(v.value)) {
-                                        console.log(value.value);
                                         checked = true;
                                     }
                                 }
