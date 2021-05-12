@@ -9,10 +9,10 @@
 ```bash
 npm install --save reactjs-form-builder
 ```
-|Field Types |Attributes   |
-|------------|-------------|
-|            |             |
-
+|Field Types|   |Attributes   |
+|-----------|---|-------------|
+| Text      | type: text  | placeholder: true/false,required: true/false,requireMessage: "Custom message for require"            |
+| Textarea  | type: textarea| placeholder: true/false,requireMessage: "Custom message for require"
 ## Usage
 
 ```jsx
