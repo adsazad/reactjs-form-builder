@@ -114,7 +114,7 @@ class FormBuilder extends React.Component {
                             onChange={this.change.bind(this)}
                             type={value.type}
                             name={key}
-                            value={value.value != null ? value.value : ""}
+                            defaultValue={value.value != null ? value.value : ""}
                             placeholder={value.placeholder == true && value.label}
                         />
                         {this.fieldError(value.errors)}
