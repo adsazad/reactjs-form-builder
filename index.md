@@ -16,6 +16,7 @@ This is dynamic form builder liberary to manage stateful forms.
 
 
 ## Usage
+```
 import React, { Component } from 'react'
 
 import FormBuilder from 'reactjs-form-builder'
@@ -79,6 +80,8 @@ class Example extends Component {
     />
   }
 }
+```
+
 License
 MIT © adsazad
 
