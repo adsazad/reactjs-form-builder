@@ -1,37 +1,86 @@
 ## Welcome to GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/adsazad/reactjs-form-builder/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+This is dynamic form builder liberary to manage stateful forms.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+## Install
+`npm install --save reactjs-form-builder`
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+|Field Types|   |Attributes   |
+|-----------|---|-------------|
+| Text      | type: text  | placeholder: true/false,<br />required: true/false,<br />requireMessage: "Custom message for require"            |
+| Textarea  | type: textarea| placeholder: true/false,<br />required: true/false,<br />requireMessage: "Custom message for require" |
+| Select    | type: select | placeholder:true/false,<br />options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require", <br />multiple: true/false,<br /> autofocus: true/false |
+| Checkbox  | type: checkbox| placeholder:true/false,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
+| Radio     | type: radio| placeholder:true/false,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+## Usage
+import React, { Component } from 'react'
 
-- Bulleted
-- List
+import FormBuilder from 'reactjs-form-builder'
 
-1. Numbered
-2. List
+class Example extends Component {
+  constructor(props) {
+    super(props);
+    this.setState({
+      form:{
+        "fields":{
+          "name":{
+            'label': "Product Name",
+            "type": "text",
+            "placeholder": true,
+            "required": true,
+            "requireMessage": "This Field is Required" // To customize message if field is empty
+          },
+          "description":{
+            'label': "Product Name",
+            "type": "textarea",
+            "required": true,
+          },
+          "categories": {
+             'label': "Categories",
+              "type": "select",
+              'options': [
+                {'label':"Apple", 'value':1},
+                {'label':"Banana", 'value':2}
+              ],
+              "placeholder": true,
+              "required": true,
+              "requireMessage": "This Field is Required"
+         },
+         'submit': {
+            "type": "submit",
+            "label": "Create Product",
+            'color:': 'btn-primary',
+          }
+        }
+      }
+    });
+  }
+  onChange(data){
+    this.setState({
+      form: data
+    });
+  }
+  onSubmit(data){
+    this.setState({
+      form: data
+    });
+    var name = this.state.form.name.value;
+    var description = this.state.form.value;
+    var category = this.state.form.value; // returns value from the options
+  }
+  render() {
+    return <FormBuilder
+      fields={this.state.form}
+      onChange={this.onChange.bind(this)}
+      onSubmit={this.onSubmit.bind(this)}
+    />
+  }
+}
+License
+MIT © adsazad
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/adsazad/reactjs-form-builder/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
