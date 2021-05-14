@@ -96,7 +96,7 @@ class FormBuilder extends React.Component {
             if (value.type == "textarea") {
                 return (
                     <Form.Group>
-                        <Form.Label>{key}</Form.Label>
+                        <Form.Label>{value.label}</Form.Label>
                         <textarea
                             onChange={this.change.bind(this)}
                             className="form-control"
