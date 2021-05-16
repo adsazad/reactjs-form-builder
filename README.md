@@ -11,11 +11,11 @@ npm install --save reactjs-form-builder
 ```
 |Field Types|   |Attributes   |
 |-----------|---|-------------|
-| Text      | type: text  | placeholder: true/false,<br />required: true/false,<br />requireMessage: "Custom message for require"            |
-| Textarea  | type: textarea| placeholder: true/false,<br />required: true/false,<br />requireMessage: "Custom message for require" |
-| Select    | type: select | placeholder:true/false,<br />options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require", <br />multiple: true/false,<br /> autofocus: true/false |
-| Checkbox  | type: checkbox| placeholder:true/false,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
-| Radio     | type: radio| placeholder:true/false,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
+| Text      | type: text  |readOnly: true/false,<br/> placeholder: String,<br />required: true/false,<br />requireMessage: "Custom message for require"            |
+| Textarea  | type: textarea|readOnly: true/false,<br/> placeholder: String,<br />required: true/false,<br />requireMessage: "Custom message for require" |
+| Select    | type: select | placeholder: String,<br />options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require", <br />multiple: true/false,<br /> autofocus: true/false |
+| Checkbox  | type: checkbox| placeholder:String,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
+| Radio     | type: radio| placeholder:String,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
 ## Usage
 
 ```jsx
@@ -32,7 +32,7 @@ class Example extends Component {
           "name":{
             'label': "Product Name",
             "type": "text",
-            "placeholder": true,
+            "placeholder": "Custom Placeholder",
             "required": true,
             "requireMessage": "This Field is Required" // To customize message if field is empty
           },
@@ -48,7 +48,7 @@ class Example extends Component {
                 {'label':"Apple", 'value':1},
                 {'label':"Banana", 'value':2}
               ],
-              "placeholder": true,
+              "placeholder": "Custom Placeholder",
               "required": true,
               "requireMessage": "This Field is Required"
          },
@@ -71,8 +71,8 @@ class Example extends Component {
       form: data
     });
     var name = this.state.form.name.value;
-    var description = this.state.form.value;
-    var category = this.state.form.value; // returns value from the options
+    var description = this.state.form.description.value;
+    var category = this.state.form.category.value; 
   }
   render() {
     return <FormBuilder

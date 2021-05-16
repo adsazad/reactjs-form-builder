@@ -102,8 +102,9 @@ class FormBuilder extends React.Component {
                             className="form-control"
                             type={value.type}
                             name={key}
+                            readOnly={value.readOnly == true ? true : false}
                             defaultValue={value.value != null ? value.value : ""}
-                            placeholder={value.placeholder == true && value.label}
+                            placeholder={value.placeholder != null && value.placeholder}
                         ></textarea>
                         {this.fieldError(value.errors)}
                     </Form.Group>
@@ -179,10 +180,11 @@ class FormBuilder extends React.Component {
                         <Form.Label>{value.label}</Form.Label>
                         <Form.Control
                             onChange={this.change.bind(this)}
+                            readOnly={value.readOnly == true ? true : false}
                             type={value.type}
                             name={key}
                             defaultValue={value.value != null ? value.value : ""}
-                            placeholder={value.placeholder == true && value.label}
+                            placeholder={value.placeholder != null && value.placeholder}
                         />
                         {this.fieldError(value.errors)}
                     </Form.Group>
