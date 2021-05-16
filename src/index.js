@@ -22,17 +22,50 @@ class FormBuilder extends React.Component {
     validate() {
         var hasAnyErr = false;
         Object.entries(this.state.fields.fields).map(([key, value]) => {
-            var errors = [];
+            if (value.errors != null) {
+                var errors = value.errors;
+            } else {
+                var errors = [];
+            }
             if (value.required == true) {
+                console.log(value.value)
                 if (value.value == null || value.value == "") {
                     hasAnyErr = true;
                     if (value.requireMessage) {
-                        errors.push(value.requireMessage);
+                        if (errors.indexOf(value.requiredMessage) == -1) {
+                            errors.push(value.requireMessage);
+                        }
                     } else {
-                        errors.push("Mindatory Field");
+                        if (errors.indexOf("Mindatory Field") == -1) {
+                            errors.push("Mindatory Field");
+                        }
+                    }
+                } else {
+                    if (errors != null) {
+                        if (value.requireMessage) {
+                            var erindex = errors.indexOf(value.requireMessage);
+                            if (erindex > -1) {
+                                errors.splice(erindex, 1);
+                            }
+                        } else {
+                            var erindex = errors.indexOf("Mindatory Field");
+                            if (erindex > -1) {
+                                console.log("here");
+
+                                errors.splice(erindex, 1);
+                            }
+                        }
                     }
                 }
             }
+            console.log(errors);
+
+            if (errors) {
+                if (errors.length != 0) {
+                    hasAnyErr = true;
+                }
+            }
+            console.log(hasAnyErr);
             this.state.fields.fields[key]['errors'] = errors;
         });
         this.props.onChange(this.state.fields);
