@@ -58,7 +58,6 @@ class FormBuilder extends React.Component {
                 }
             }
             if (value.required == true) {
-                console.log(value.value)
                 if (value.requireMessage) {
                     var requiredMessage = value.requireMessage;
                 } else {
@@ -78,14 +77,11 @@ class FormBuilder extends React.Component {
                     }
                 }
             }
-            console.log(errors);
-
             if (errors) {
                 if (errors.length != 0) {
                     hasAnyErr = true;
                 }
             }
-            console.log(hasAnyErr);
             this.state.fields.fields[key]['errors'] = errors;
         });
         this.props.onChange(this.state.fields);
