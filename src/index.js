@@ -27,33 +27,53 @@ class FormBuilder extends React.Component {
             } else {
                 var errors = [];
             }
-            if (value.required == true) {
-                console.log(value.value)
-                if (value.value == null || value.value == "") {
-                    hasAnyErr = true;
-                    if (value.requireMessage) {
-                        if (errors.indexOf(value.requiredMessage) == -1) {
-                            errors.push(value.requireMessage);
+            if (value.min != null) {
+                var minMessage = "Field must have minimum " + value.min + " characters";
+                if (value.value != null) {
+                    if (value.value.length < value.min) {
+                        hasAnyErr = true;
+                        if (errors.indexOf() == -1) {
+                            errors.push(minMessage);
                         }
                     } else {
-                        if (errors.indexOf("Mindatory Field") == -1) {
-                            errors.push("Mindatory Field");
+                        if (errors.indexOf(minMessage) > -1) {
+                            errors.splice(errors.indexOf(minMessage), 1);
                         }
+                    }
+                }
+            }
+            if (value.max != null) {
+                var maxMessage = "Field must have maximum " + value.max + " characters only";
+                if (value.value != null) {
+                    if (value.value.length > value.max) {
+                        hasAnyErr = true;
+                        if (errors.indexOf() == -1) {
+                            errors.push(maxMessage);
+                        }
+                    } else {
+                        if (errors.indexOf(maxMessage) > -1) {
+                            errors.splice(errors.indexOf(maxMessage), 1);
+                        }
+                    }
+                }
+            }
+            if (value.required == true) {
+                console.log(value.value)
+                if (value.requireMessage) {
+                    var requiredMessage = value.requireMessage;
+                } else {
+                    var requiredMessage = "Mindatory Field";
+                }
+                if (value.value == null || value.value == "") {
+                    hasAnyErr = true;
+                    if (errors.indexOf(requiredMessage) == -1) {
+                        errors.push(requiredMessage);
                     }
                 } else {
                     if (errors != null) {
-                        if (value.requireMessage) {
-                            var erindex = errors.indexOf(value.requireMessage);
-                            if (erindex > -1) {
-                                errors.splice(erindex, 1);
-                            }
-                        } else {
-                            var erindex = errors.indexOf("Mindatory Field");
-                            if (erindex > -1) {
-                                console.log("here");
-
-                                errors.splice(erindex, 1);
-                            }
+                        var erindex = errors.indexOf(requiredMessage);
+                        if (erindex > -1) {
+                            errors.splice(erindex, 1);
                         }
                     }
                 }
