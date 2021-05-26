@@ -89,10 +89,10 @@ class FormBuilder extends React.Component {
             this.props.onSubmit(this.state.fields);
         }
     }
-    componentDidUpdate(nextProps) {
-        if (nextProps.fields != this.state.fields) {
+    componentDidUpdate(previousProps) {
+        if (this.props.fields != this.state.fields) {
             this.setState({
-                fields: nextProps.fields
+                fields: this.props.fields
             });
         }
     }
