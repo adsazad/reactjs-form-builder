@@ -11,6 +11,9 @@ class FormBuilder extends React.Component {
             fields: props.fields,
         };
     }
+    componentDidMount() {
+        this.initActions();
+    }
     change(e) {
         this.state.fields.fields[e.target.name]['value'] = e.target.value;
         this.props.onChange(this.state.fields);
@@ -140,103 +143,127 @@ class FormBuilder extends React.Component {
         }
         return er;
     }
+    initActions() {
+        // console.log(this.state.fields);
+        if (this.props.getActions) {
+            this.props.getActions(this.state.fields);
+        }
+    }
     getFields() {
         const res = Object.entries(this.state.fields.fields).map(([key, value]) => {
+            this.state.fields.fields[key]["actions"] = React.createRef();
             if (value.type == "textarea") {
                 return (
-                    <Form.Group>
-                        <Form.Label>{value.label}</Form.Label>
-                        <textarea
-                            onChange={this.change.bind(this)}
-                            className="form-control"
-                            type={value.type}
-                            name={key}
-                            readOnly={value.readOnly == true ? true : false}
-                            defaultValue={value.value != null ? value.value : ""}
-                            placeholder={value.placeholder != null && value.placeholder}
-                        ></textarea>
-                        {this.fieldError(value.errors)}
-                    </Form.Group>
+                    <div key={"field-" + key}>
+                        <Form.Group>
+                            <Form.Label>{value.label}</Form.Label>
+                            <textarea
+                                onChange={this.change.bind(this)}
+                                ref={this.state.fields.fields[key]["actions"]}
+                                className="form-control"
+                                type={value.type}
+                                name={key}
+                                readOnly={value.readOnly == true ? true : false}
+                                defaultValue={value.value != null ? value.value : ""}
+                                placeholder={value.placeholder != null && value.placeholder}
+                            ></textarea>
+                            {this.fieldError(value.errors)}
+                        </Form.Group>
+                    </div>
                 );
             } else if (value.type == "select") {
                 return (
-                    <Form.Group>
-                        <Form.Label>{value.label}</Form.Label>
-                        <Select
-                            name={key}
-                            // placeholder={value.value}
-                            isMulti={value.multiple != null ? value.multiple : false}
-                            autoFocus={value.autofocus != null ? value.autofocus : false}
-                            options={value.options}
-                            value={value.value != null ? value.value : ""}
-                            onChange={this.selectChange(key)}
-                        />
-                        {this.fieldError(value.errors)}
+                    <div key={"field-" + key}>
+                        <Form.Group>
+                            <Form.Label>{value.label}</Form.Label>
+                            <Select
+                                name={key}
+                                ref={this.state.fields.fields[key]["actions"]}
+                                // placeholder={value.value}
+                                isMulti={value.multiple != null ? value.multiple : false}
+                                autoFocus={value.autofocus != null ? value.autofocus : false}
+                                options={value.options}
+                                value={value.value != null ? value.value : ""}
+                                onChange={this.selectChange(key)}
+                            />
+                            {this.fieldError(value.errors)}
 
-                    </Form.Group>
+                        </Form.Group>
+                    </div>
                 );
             } else if (value.type == "file") {
                 return (
-                    <Form.Group>
-                        <Form.File
-                            label={value.name}
-                            name={value.key}
-                        />
-                        {this.fieldError(value.errors)}
-                    </Form.Group>
+                    <div key={"field-" + key}>
+
+                        <Form.Group>
+                            <Form.File
+                                ref={this.state.fields.fields[key]["actions"]}
+                                label={value.name}
+                                name={value.key}
+                            />
+                            {this.fieldError(value.errors)}
+                        </Form.Group>
+                    </div>
                 );
             } else if (value.type == "submit") {
                 return (<Button type="submit" className={value.color}>{value.label}</Button>);
             } else if (value.type == "checkbox") {
                 return (
-                    <Form.Group >
-                        {
-                            Object.entries(value.options).map(([k, v]) => {
-                                var ischecked = false;
-                                if (value.value != null) {
-                                    var array = value.value;
-                                    array = array || [];
-                                    if (array.includes(v.value)) {
-                                        ischecked = true;
+                    <div key={"field-" + key}>
+                        <Form.Group ref={this.state.fields.fields[key]["actions"]} >
+                            {
+                                Object.entries(value.options).map(([k, v]) => {
+                                    var ischecked = false;
+                                    if (value.value != null) {
+                                        var array = value.value;
+                                        array = array || [];
+                                        if (array.includes(v.value)) {
+                                            ischecked = true;
+                                        }
                                     }
-                                }
-                                return (<Form.Check type="checkbox" checked={ischecked} name={key} onChange={this.checkBoxChange.bind(this)} label={v.label} value={v.value} />);
-                            })
-                        }
-                        {this.fieldError(value.errors)}
-                    </Form.Group>
+                                    return (<Form.Check type="checkbox" checked={ischecked} name={key} onChange={this.checkBoxChange.bind(this)} label={v.label} value={v.value} />);
+                                })
+                            }
+                            {this.fieldError(value.errors)}
+                        </Form.Group>
+                    </div>
                 );
             } else if (value.type == "radio") {
                 return (
-                    <Form.Group >
-                        {
-                            Object.entries(value.options).map(([k, v]) => {
-                                var checked = false;
-                                if (value != null) {
-                                    if (value.value == v.value) {
-                                        checked = true;
+                    <div key={"field-" + key}>
+                        <Form.Group ref={this.state.fields.fields[key]["actions"]} >
+                            {
+                                Object.entries(value.options).map(([k, v]) => {
+                                    var checked = false;
+                                    if (value != null) {
+                                        if (value.value == v.value) {
+                                            checked = true;
+                                        }
                                     }
-                                }
-                                return (<Form.Check type="radio" name={key} checked={checked} onChange={this.radioChange.bind(this)} label={v.label} value={v.value} />);
-                            })
-                        }
-                        {this.fieldError(value.errors)}
-                    </Form.Group>
+                                    return (<Form.Check type="radio" name={key} checked={checked} onChange={this.radioChange.bind(this)} label={v.label} value={v.value} />);
+                                })
+                            }
+                            {this.fieldError(value.errors)}
+                        </Form.Group>
+                    </div>
                 );
             } else {
                 return (
-                    <Form.Group>
-                        <Form.Label>{value.label}</Form.Label>
-                        <Form.Control
-                            onChange={this.change.bind(this)}
-                            readOnly={value.readOnly == true ? true : false}
-                            type={value.type}
-                            name={key}
-                            defaultValue={value.value != null ? value.value : ""}
-                            placeholder={value.placeholder != null && value.placeholder}
-                        />
-                        {this.fieldError(value.errors)}
-                    </Form.Group>
+                    <div key={"field-" + key}>
+                        <Form.Group>
+                            <Form.Label>{value.label}</Form.Label>
+                            <Form.Control
+                                ref={this.state.fields.fields[key]["actions"]}
+                                onChange={this.change.bind(this)}
+                                readOnly={value.readOnly == true ? true : false}
+                                type={value.type}
+                                name={key}
+                                defaultValue={value.value != null ? value.value : ""}
+                                placeholder={value.placeholder != null && value.placeholder}
+                            />
+                            {this.fieldError(value.errors)}
+                        </Form.Group>
+                    </div>
                 );
             }
         });
