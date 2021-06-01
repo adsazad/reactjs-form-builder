@@ -106,7 +106,7 @@ once getAction is initiated you will have `actions` key in your field.
 
 Eg. to focus in field.
 ```jsx
-this.state.form.textfield.actions.focus();
+this.state.form.fields.yourtextfield.actions.focus();
 ```
 
 ## License
