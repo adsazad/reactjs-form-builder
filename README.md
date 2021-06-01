@@ -84,7 +84,7 @@ class Example extends Component {
   }
 }
 ```
-##Actions
+## Actions
 if you preform action like focusing onto field on component mount or other actions on field reference. add `getAction` prop in your FormBuilder Component.
 ```jsx
 getActions(data){
