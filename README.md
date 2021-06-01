@@ -84,9 +84,9 @@ class Example extends Component {
   }
 }
 ```
-###Actions
+##Actions
 if you preform action like focusing onto field on component mount or other actions on field reference. add `getAction` prop in your FormBuilder Component.
-```
+```jsx
 getActions(data){
   this.setState({
     form: data,
@@ -109,7 +109,6 @@ Eg. to focus in field.
 this.state.form.textfield.actions.focus();
 ```
 
-Right Now being used in https://asiatradedirectory.com
 ## License
 
 MIT © [adsazad](https://github.com/adsazad)
