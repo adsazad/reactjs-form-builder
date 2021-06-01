@@ -105,7 +105,7 @@ getAction prop gives callback and return form state with actions.
 once getAction is initiated you will have `actions` key in your field.
 
 Eg. to focus in field.
-```
+```jsx
 this.state.form.textfield.actions.focus();
 ```
 
