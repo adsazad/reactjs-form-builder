@@ -12,6 +12,7 @@ npm install --save reactjs-form-builder
 |Field Types|   |Attributes   |
 |-----------|---|-------------|
 | Text      | type: text  |readOnly: true/false,<br/> placeholder: String,<br />required: true/false,<br />requireMessage: "Custom message for require",<br />min: Integer, <br/>max: Integer            |
+| Number      | type: number  |readOnly: true/false,<br/> placeholder: String,<br />required: true/false,<br />requireMessage: "Custom message for require",<br />min: Integer, <br/>max: Integer            |
 | Textarea  | type: textarea|readOnly: true/false,<br/> placeholder: String,<br />required: true/false,<br />requireMessage: "Custom message for require",<br />min: Integer, <br/>max: Integer |
 | Select    | type: select | placeholder: String,<br />options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require", <br />multiple: true/false,<br /> autofocus: true/false |
 | Checkbox  | type: checkbox| placeholder:String,<br /> options:[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"}] ,<br />required: true/false,<br />requireMessage: "Custom message for require"|
@@ -82,6 +83,30 @@ class Example extends Component {
     />
   }
 }
+```
+###Actions
+if you preform action like focusing onto field on component mount or other actions on field reference. add `getAction` prop in your FormBuilder Component.
+```
+getActions(data){
+  this.setState({
+    form: data,
+  });
+}
+render(){
+  return (
+  <FormBuilder
+  fields={this.state.form}
+  getActions={this.getActions.bind(this)}
+  />
+  );
+}
+```
+getAction prop gives callback and return form state with actions.
+once getAction is initiated you will have `actions` key in your field.
+
+Eg. to focus in field.
+```
+this.state.form.textfield.actions.focus();
 ```
 
 Right Now being used in https://asiatradedirectory.com
