@@ -247,6 +247,24 @@ class FormBuilder extends React.Component {
                         </Form.Group>
                     </div>
                 );
+            } else if (value.type == "number") {
+                return (
+                    <div key={"field-" + key}>
+                        <Form.Group>
+                            <Form.Label>{value.label}</Form.Label>
+                            <Form.Control
+                                ref={this.state.fields.fields[key]["actions"]}
+                                onChange={this.change.bind(this)}
+                                readOnly={value.readOnly == true ? true : false}
+                                type={value.type}
+                                name={key}
+                                defaultValue={value.value != null ? value.value : ""}
+                                placeholder={value.placeholder != null && value.placeholder}
+                            />
+                            {this.fieldError(value.errors)}
+                        </Form.Group>
+                    </div>
+                );
             } else {
                 return (
                     <div key={"field-" + key}>
