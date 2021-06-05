@@ -164,7 +164,7 @@ class FormBuilder extends React.Component {
                                 type={value.type}
                                 name={key}
                                 readOnly={value.readOnly == true ? true : false}
-                                defaultValue={value.value != null ? value.value : ""}
+                                value={value.value != null ? value.value : ""}
                                 placeholder={value.placeholder != null && value.placeholder}
                             ></textarea>
                             {this.fieldError(value.errors)}
@@ -258,7 +258,7 @@ class FormBuilder extends React.Component {
                                 readOnly={value.readOnly == true ? true : false}
                                 type={value.type}
                                 name={key}
-                                defaultValue={value.value != null ? value.value : ""}
+                                value={value.value != null ? value.value : ""}
                                 placeholder={value.placeholder != null && value.placeholder}
                             />
                             {this.fieldError(value.errors)}
@@ -276,7 +276,7 @@ class FormBuilder extends React.Component {
                                 readOnly={value.readOnly == true ? true : false}
                                 type={value.type}
                                 name={key}
-                                defaultValue={value.value != null ? value.value : ""}
+                                value={value.value != null ? value.value : ""}
                                 placeholder={value.placeholder != null && value.placeholder}
                             />
                             {this.fieldError(value.errors)}
