@@ -33,10 +33,16 @@ class FormBuilder extends React.Component {
             if (value.min != null) {
                 var minMessage = "Field must have minimum " + value.min + " characters";
                 if (value.value != null) {
-                    if (value.value.length < value.min) {
-                        hasAnyErr = true;
-                        if (errors.indexOf() == -1) {
-                            errors.push(minMessage);
+                    if (value.value.length != 0) {
+                        if (value.value.length < value.min) {
+                            hasAnyErr = true;
+                            if (errors.indexOf() == -1) {
+                                errors.push(minMessage);
+                            }
+                        } else {
+                            if (errors.indexOf(minMessage) > -1) {
+                                errors.splice(errors.indexOf(minMessage), 1);
+                            }
                         }
                     } else {
                         if (errors.indexOf(minMessage) > -1) {
