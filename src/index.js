@@ -151,6 +151,7 @@ class FormBuilder extends React.Component {
     }
     initActions() {
         // console.log(this.state.fields);
+        this.state.fields.submit = this.submit();
         if (this.props.getActions) {
             this.props.getActions(this.state.fields);
         }

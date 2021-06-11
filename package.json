@@ -1,6 +1,6 @@
 {
   "name": "reactjs-form-builder",
-  "version": "1.1.10",
+  "version": "1.2.0",
   "description": "React Js Form Builder",
   "author": "adsazad",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build"
   },
-  "peerDependencies": {
+  "dependencies": {
     "react": "^16.0.0",
     "react-bootstrap": "^1.5.2",
     "react-select": "^4.3.0"
