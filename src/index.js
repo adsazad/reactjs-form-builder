@@ -149,9 +149,12 @@ class FormBuilder extends React.Component {
         }
         return er;
     }
+    submitCallBack() {
+        this.validate();
+    }
     initActions() {
         // console.log(this.state.fields);
-        this.state.fields.submit = this.submit();
+        this.state.fields.submit = this.submitCallBack.bind(this);
         if (this.props.getActions) {
             this.props.getActions(this.state.fields);
         }
