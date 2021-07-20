@@ -189,12 +189,13 @@ class FormBuilder extends React.Component {
                             <Select
                                 name={key}
                                 ref={this.state.fields.fields[key]["actions"]}
-                                // placeholder={value.value}
+                                placeholder={value.placeholder != null && value.placeholder}
                                 isMulti={value.multiple != null ? value.multiple : false}
                                 autoFocus={value.autofocus != null ? value.autofocus : false}
                                 options={value.options}
                                 value={value.value != null ? value.value : ""}
                                 onChange={this.selectChange(key)}
+                                className="form-builder-select"
                             />
                             {this.fieldError(value.errors)}
 
