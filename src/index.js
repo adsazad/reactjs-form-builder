@@ -222,6 +222,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group ref={this.state.fields.fields[key]["actions"]} >
+                            <Form.Label>{value.label}</Form.Label>
                             {
                                 Object.entries(value.options).map(([k, v]) => {
                                     var ischecked = false;
@@ -243,6 +244,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group ref={this.state.fields.fields[key]["actions"]} >
+                            <Form.Label>{value.label}</Form.Label>
                             {
                                 Object.entries(value.options).map(([k, v]) => {
                                     var checked = false;
