@@ -155,6 +155,7 @@ class FormBuilder extends React.Component {
     initActions() {
         // console.log(this.state.fields);
         this.state.fields.submit = this.submitCallBack.bind(this);
+        this.state.fields.getFormData = this.getFormData.bind(this);
         if (this.props.getActions) {
             this.props.getActions(this.state.fields);
         }
@@ -305,6 +306,27 @@ class FormBuilder extends React.Component {
             }
         });
         return res;
+    }
+    getFormData() {
+        var formData = new FormData();
+        Object.entries(this.state.fields.fields).map(([k, v]) => {
+            if (v.required == true) {
+                if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
+                    formData.append(k, v.value.value);
+                } else {
+                    formData.append(k, v.value);
+                }
+            } else {
+                if (v.value) {
+                    if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
+                        formData.append(k, v.value.value);
+                    } else {
+                        formData.append(k, v.value);
+                    }
+                }
+            }
+        });
+        return formData;
     }
     render() {
         const res = this.getFields();
