@@ -163,6 +163,7 @@ class FormBuilder extends React.Component {
         if (field.required) {
             return (<span className="text-danger">*</span>);
         }
+        // return (<></>);
     }
     getFields() {
         const res = Object.entries(this.state.fields.fields).map(([key, value]) => {
@@ -171,7 +172,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group>
-                            <Form.Label>{value.label + " " + this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
                             <textarea
                                 onChange={this.change.bind(this)}
                                 ref={this.state.fields.fields[key]["actions"]}
@@ -190,7 +191,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group>
-                            <Form.Label>{value.label + " " + this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
                             <Select
                                 name={key}
                                 ref={this.state.fields.fields[key]["actions"]}
@@ -227,7 +228,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group ref={this.state.fields.fields[key]["actions"]} >
-                            <Form.Label>{value.label + " " + this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
                             {
                                 Object.entries(value.options).map(([k, v]) => {
                                     var ischecked = false;
@@ -249,7 +250,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group ref={this.state.fields.fields[key]["actions"]} >
-                            <Form.Label>{value.label + " " + this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
                             {
                                 Object.entries(value.options).map(([k, v]) => {
                                     var checked = false;
@@ -269,7 +270,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group>
-                            <Form.Label>{value.label + " " + this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
                             <Form.Control
                                 ref={this.state.fields.fields[key]["actions"]}
                                 onChange={this.change.bind(this)}
@@ -287,7 +288,7 @@ class FormBuilder extends React.Component {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group>
-                            <Form.Label>{value.label + " " + this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
                             <Form.Control
                                 ref={this.state.fields.fields[key]["actions"]}
                                 onChange={this.change.bind(this)}
