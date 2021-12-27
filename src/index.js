@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, InputGroup } from "react-bootstrap";
 import Select from 'react-select';
 
 
@@ -272,6 +272,7 @@ class FormBuilder extends React.Component {
                     <div key={"field-" + key}>
                         <Form.Group>
                             <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
+                            {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
                             <Form.Control
                                 ref={this.state.fields.fields[key]["actions"]}
                                 onChange={this.change.bind(this)}
@@ -281,6 +282,7 @@ class FormBuilder extends React.Component {
                                 value={value.value != null ? value.value : ""}
                                 placeholder={value.placeholder != null && value.placeholder}
                             />
+                            {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
                             {this.fieldError(value.errors)}
                         </Form.Group>
                     </div>
@@ -290,6 +292,7 @@ class FormBuilder extends React.Component {
                     <div key={"field-" + key}>
                         <Form.Group>
                             <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
+                            {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
                             <Form.Control
                                 ref={this.state.fields.fields[key]["actions"]}
                                 onChange={this.change.bind(this)}
@@ -299,6 +302,7 @@ class FormBuilder extends React.Component {
                                 value={value.value != null ? value.value : ""}
                                 placeholder={value.placeholder != null && value.placeholder}
                             />
+                            {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
                             {this.fieldError(value.errors)}
                         </Form.Group>
                     </div>
