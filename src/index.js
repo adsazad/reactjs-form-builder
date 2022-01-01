@@ -194,7 +194,7 @@ class FormBuilder extends React.Component {
                     <div key={"field-" + key}>
                         <Form.Group>
                             <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            {this.state.fields[key]['url'] ? <Select
+                            {this.state.fields.fields[key]['url'] ? <Select
                                 name={key}
                                 ref={this.state.fields.fields[key]["actions"]}
                                 placeholder={value.placeholder != null && value.placeholder}
