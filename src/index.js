@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button, InputGroup } from "react-bootstrap";
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 
 class FormBuilder extends React.Component {
@@ -193,7 +194,7 @@ class FormBuilder extends React.Component {
                     <div key={"field-" + key}>
                         <Form.Group>
                             <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            <Select
+                            {this.state.fields[key]['url'] ? <Select
                                 name={key}
                                 ref={this.state.fields.fields[key]["actions"]}
                                 placeholder={value.placeholder != null && value.placeholder}
@@ -203,7 +204,25 @@ class FormBuilder extends React.Component {
                                 value={value.value != null ? value.value : ""}
                                 onChange={this.selectChange(key)}
                                 className="form-builder-select"
-                            />
+                            /> :
+                                <AsyncSelect
+                                    name={key}
+                                    ref={this.state.fields.fields[key]["actions"]}
+                                    placeholder={value.placeholder != null && value.placeholder}
+                                    isMulti={value.multiple != null ? value.multiple : false}
+                                    autoFocus={value.autofocus != null ? value.autofocus : false}
+                                    // options={value.options}
+                                    value={value.value != null ? value.value : ""}
+                                    onChange={this.selectChange(key)}
+                                    className="form-builder-select"
+                                    cacheOptions
+                                    defaultOptions
+                                    loadOptions={async (inputValue) => {
+                                        var req = await axios.get(`${this.state.fields.fields[key]["url"]}?query=${inputValue}`);
+                                        return req.data.data;
+                                    }}
+                                />
+                            }
                             {this.fieldError(value.errors)}
 
                         </Form.Group>
