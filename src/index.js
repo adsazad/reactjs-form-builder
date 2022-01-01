@@ -207,8 +207,10 @@ class FormBuilder extends React.Component {
                                 cacheOptions
                                 defaultOptions
                                 loadOptions={async (inputValue) => {
-                                    var req = await axios.get(`${this.state.fields.fields[key]["url"]}?query=${inputValue}`);
-                                    return req.data.data;
+                                    if (inputValue) {
+                                        var req = await axios.get(`${this.state.fields.fields[key]["url"]}?query=${inputValue}`);
+                                        return req.data.data;
+                                    }
                                 }}
                             /> : <Select
                                 name={key}
