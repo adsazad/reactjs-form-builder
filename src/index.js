@@ -207,7 +207,8 @@ class FormBuilder extends React.Component {
                                 cacheOptions
                                 defaultOptions
                                 loadOptions={async (inputValue) => {
-                                    if (inputValue.length > 1) {
+                                var minSearchLen = this.state.fields.fields[key]["minSearchLen"] != null ? this.state.fields.fields[key]["minSearchLen"] : 2;
+                                    if (inputValue.length >= minSearchLen) {
                                         var req = await axios.get(`${this.state.fields.fields[key]["url"]}?query=${inputValue}`);
                                         return req.data.data;
                                     }
