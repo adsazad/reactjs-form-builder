@@ -27,7 +27,7 @@ import FormBuilder from 'reactjs-form-builder'
 class Example extends Component {
   constructor(props) {
     super(props);
-    this.setState({
+    this.state = {
       form:{
         "fields":{
           "name":{
@@ -60,7 +60,7 @@ class Example extends Component {
           }
         }
       }
-    });
+    };
   }
   onChange(data){
     this.setState({
