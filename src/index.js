@@ -4,28 +4,79 @@ import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import axios from "axios"
 
-class FormBuilder extends React.Component {
+function FormBuilder({ fields, onChange, onSubmit, getActions }) {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            fields: props.fields,
-        };
+    React.useEffect(() => {
+        initActions();
+    }, []);
+
+    const fchange = React.useCallback(() => {
+        setFieldsS(fields);
+    }, [fields]);
+
+    const initActions = () => {
+        var f = fields;
+        f.submit = () => { submitCallBack() };
+        f.getFormData = () => { getFormData.bind(this) };
+        if (getActions) {
+            getActions(fields);
+        }
     }
-    componentDidMount() {
-        this.initActions();
+    const submitCallBack = () => {
+        console.log(fields);
+        validate();
     }
-    change(e) {
-        this.state.fields.fields[e.target.name]['value'] = e.target.value;
-        this.props.onChange(this.state.fields);
+    const change = (e) => {
+        console.log("f");
+        var f = fields;
+        f.fields[e.target.name]['value'] = e.target.value;
+        onChange(f);
     }
-    submit(e) {
-        e.preventDefault();
-        this.validate();
+
+    const checkBoxChange = (e) => {
+        var name = e.target.name;
+        var fieldData = fields;
+        var array = new Array();
+        array = array || [];
+        if (fieldData.fields[name]['value'] != null) {
+            array = fieldData.fields[name]["value"];
+            array = array || [];
+        }
+        if (e.target.checked) {
+            array.push(e.target.value);
+        } else {
+            array.splice(array.indexOf(e.target.value), 1);
+        }
+        fieldData.fields[name]["value"] = array;
+        onChange(fieldData);
     }
-    validate() {
+
+    const getFormData = () => {
+        var formData = new FormData();;
+        Object.entries(fields.fields).map(([k, v]) => {
+            if (v.required == true) {
+                if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
+                    formData.append(k, v.value.value);
+                } else {
+                    formData.append(k, v.value);
+                }
+            } else {
+                if (v.value) {
+                    if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
+                        formData.append(k, v.value.value);
+                    } else {
+                        formData.append(k, v.value);
+                    }
+                }
+            }
+        });
+        return formData;
+    }
+    const validate = () => {
         var hasAnyErr = false;
-        Object.entries(this.state.fields.fields).map(([key, value]) => {
+        console.log(fields);
+        var f = fields;
+        Object.entries(fields.fields).map(([key, value]) => {
             if (value.errors != null) {
                 var errors = value.errors;
             } else {
@@ -92,56 +143,40 @@ class FormBuilder extends React.Component {
                     hasAnyErr = true;
                 }
             }
-            this.state.fields.fields[key]['errors'] = errors;
+            f.fields[key]['errors'] = errors;
+            // setFieldsS(f);
         });
-        this.props.onChange(this.state.fields);
+        onChange(f);
         if (hasAnyErr == false) {
-            this.props.onSubmit(this.state.fields);
+            onSubmit(f);
         }
     }
-    componentDidUpdate(previousProps) {
-        if (this.props.fields != this.state.fields) {
-            this.setState({
-                fields: this.props.fields
-            });
+    const submit = (e) => {
+        e.preventDefault();
+        validate();
+    }
+    return (
+        <Form onSubmit={(e) => { submit(e) }}>
+            <Fields masterChange={(f) => { onChange(f) }} fieldsProps={fields} checkBoxChange={(e) => { checkBoxChange(e) }} change={(c) => {
+                change(c);
+            }} />
+        </Form>
+    );
+}
+
+function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
+    const [fields, setFields] = React.useState(fieldsProps);
+    React.useEffect(() => {
+        setFields(fieldsProps);
+    }, [fieldsProps]);
+
+    const requiredFieldStar = (field) => {
+        if (field.required) {
+            return (<span className="text-danger">*</span>);
         }
+        // return (<></>);
     }
-    selectChange(name) {
-        return function (val) {
-            this.state.fields.fields[name]['value'] = val;
-            this.props.onChange(this.state.fields);
-        }.bind(this);
-    }
-    radioChange(e) {
-        var name = e.target.name;
-        var fieldData = this.state.fields;
-        fieldData.fields[name]["value"] = e.target.value;
-        this.setState({
-            fields: fieldData,
-        });
-        this.props.onChange(this.state.fields);
-    }
-    checkBoxChange(e) {
-        var name = e.target.name;
-        var fieldData = this.state.fields;
-        var array = new Array();
-        array = array || [];
-        if (fieldData.fields[name]['value'] != null) {
-            array = fieldData.fields[name]["value"];
-            array = array || [];
-        }
-        if (e.target.checked) {
-            array.push(e.target.value);
-        } else {
-            array.splice(array.indexOf(e.target.value), 1);
-        }
-        fieldData.fields[name]["value"] = array;
-        this.setState({
-            fields: fieldData,
-        });
-        this.props.onChange(this.state.fields);
-    }
-    fieldError(errors) {
+    const fieldError = (errors) => {
         var er = "";
         if (errors != null) {
             er = Object.entries(errors).map(([key, err]) => {
@@ -150,34 +185,23 @@ class FormBuilder extends React.Component {
         }
         return er;
     }
-    submitCallBack() {
-        this.validate();
-    }
-    initActions() {
-        // console.log(this.state.fields);
-        this.state.fields.submit = this.submitCallBack.bind(this);
-        this.state.fields.getFormData = this.getFormData.bind(this);
-        if (this.props.getActions) {
-            this.props.getActions(this.state.fields);
-        }
-    }
-    requiredFieldStar(field) {
-        if (field.required) {
-            return (<span className="text-danger">*</span>);
-        }
-        // return (<></>);
-    }
-    getFields() {
-        const res = Object.entries(this.state.fields.fields).map(([key, value]) => {
-            this.state.fields.fields[key]["actions"] = React.createRef();
+    // const selectChange = (name) => {
+    //     return function (val) {
+    //         console.log(val);
+
+    //     }.bind(this);
+    // }
+    if (fields.fields) {
+        const res = Object.entries(fields.fields).map(([key, value]) => {
+            fields.fields[key]["actions"] = React.createRef();
             if (value.type == "textarea") {
                 return (
                     <div key={"field-" + key}>
                         <Form.Group>
-                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
+                            <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
                             <textarea
-                                onChange={this.change.bind(this)}
-                                ref={this.state.fields.fields[key]["actions"]}
+                                onChange={(e) => { change(e) }}
+                                ref={fields.fields[key]["actions"]}
                                 className="form-control"
                                 type={value.type}
                                 name={key}
@@ -185,188 +209,180 @@ class FormBuilder extends React.Component {
                                 value={value.value != null ? value.value : ""}
                                 placeholder={value.placeholder != null && value.placeholder}
                             ></textarea>
-                            {this.fieldError(value.errors)}
+                            {fieldError(value.errors)}
                         </Form.Group>
                     </div>
                 );
             } else if (value.type == "select") {
+                const newLocal = <div key={"field-" + key}>
+                    <Form.Group>
+                        <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
+                        {fields.fields[key]['url'] ? <AsyncSelect
+                            name={key}
+                            ref={fields.fields[key]["actions"]}
+                            placeholder={value.placeholder != null && value.placeholder}
+                            isMulti={value.multiple != null ? value.multiple : false}
+                            autoFocus={value.autofocus != null ? value.autofocus : false}
+                            // options={value.options}
+                            value={value.value != null ? value.value : ""}
+                            onChange={(val) => {
+                                fields.fields[key]['value'] = val;
+                                masterChange(fields);
+                            }}
+                            className="form-builder-select"
+                            cacheOptions
+                            defaultOptions
+                            loadOptions={async (inputValue) => {
+                                var minSearchLen = fields.fields[key]["minSearchLen"] != null ? fields.fields[key]["minSearchLen"] : 2;
+                                if (inputValue.length >= minSearchLen) {
+                                    var req = await axios.get(`${fields.fields[key]["url"]}?query=${inputValue}`);
+                                    return req.data.data;
+                                }
+                            }} /> : <Select
+                            name={key}
+                            ref={fields.fields[key]["actions"]}
+                            placeholder={value.placeholder != null && value.placeholder}
+                            isMulti={value.multiple != null ? value.multiple : false}
+                            autoFocus={value.autofocus != null ? value.autofocus : false}
+                            options={value.options}
+                            value={value.value != null ? value.value : ""}
+                            onChange={(val) => {
+                                fields.fields[key]['value'] = val;
+                                masterChange(fields);
+                            }}
+                            className="form-builder-select" />}
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
                 return (
-                    <div key={"field-" + key}>
-                        <Form.Group>
-                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            {this.state.fields.fields[key]['url'] ? <AsyncSelect
-                                name={key}
-                                ref={this.state.fields.fields[key]["actions"]}
-                                placeholder={value.placeholder != null && value.placeholder}
-                                isMulti={value.multiple != null ? value.multiple : false}
-                                autoFocus={value.autofocus != null ? value.autofocus : false}
-                                // options={value.options}
-                                value={value.value != null ? value.value : ""}
-                                onChange={this.selectChange(key)}
-                                className="form-builder-select"
-                                cacheOptions
-                                defaultOptions
-                                loadOptions={async (inputValue) => {
-                                var minSearchLen = this.state.fields.fields[key]["minSearchLen"] != null ? this.state.fields.fields[key]["minSearchLen"] : 2;
-                                    if (inputValue.length >= minSearchLen) {
-                                        var req = await axios.get(`${this.state.fields.fields[key]["url"]}?query=${inputValue}`);
-                                        return req.data.data;
-                                    }
-                                }}
-                            /> : <Select
-                                name={key}
-                                ref={this.state.fields.fields[key]["actions"]}
-                                placeholder={value.placeholder != null && value.placeholder}
-                                isMulti={value.multiple != null ? value.multiple : false}
-                                autoFocus={value.autofocus != null ? value.autofocus : false}
-                                options={value.options}
-                                value={value.value != null ? value.value : ""}
-                                onChange={this.selectChange(key)}
-                                className="form-builder-select"
-                            />
-
-                            }
-                            {this.fieldError(value.errors)}
-
-                        </Form.Group>
-                    </div>
+                    newLocal
                 );
             } else if (value.type == "file") {
-                return (
-                    <div key={"field-" + key}>
+                const newLocal_4 = <div key={"field-" + key}>
 
-                        <Form.Group>
-                            <Form.File
-                                ref={this.state.fields.fields[key]["actions"]}
-                                label={value.name}
-                                name={value.key}
-                            />
-                            {this.fieldError(value.errors)}
-                        </Form.Group>
-                    </div>
+                    <Form.Group>
+                        <Form.File
+                            ref={fields.fields[key]["actions"]}
+                            label={value.name}
+                            name={value.key} />
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
+                return (
+                    newLocal_4
                 );
             } else if (value.type == "submit") {
                 return (<Button type="submit" className={value.color}>{value.label}</Button>);
             } else if (value.type == "checkbox") {
-                return (
-                    <div key={"field-" + key}>
-                        <Form.Group ref={this.state.fields.fields[key]["actions"]} >
-                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            {
-                                Object.entries(value.options).map(([k, v]) => {
-                                    var ischecked = false;
-                                    if (value.value != null) {
-                                        var array = value.value;
-                                        array = array || [];
-                                        if (array.includes(v.value)) {
-                                            ischecked = true;
-                                        }
-                                    }
-                                    return (<Form.Check type="checkbox" checked={ischecked} name={key} onChange={this.checkBoxChange.bind(this)} label={v.label} value={v.value} />);
-                                })
+                const newLocal_3 = <div key={"field-" + key}>
+                    <Form.Group ref={fields.fields[key]["actions"]}>
+                        <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
+                        {Object.entries(value.options).map(([k, v]) => {
+                            var ischecked = false;
+                            if (value.value != null) {
+                                var array = value.value;
+                                array = array || [];
+                                if (array.includes(v.value)) {
+                                    ischecked = true;
+                                }
                             }
-                            {this.fieldError(value.errors)}
-                        </Form.Group>
-                    </div>
+                            return (<Form.Check type="checkbox" checked={ischecked} name={key} onChange={(e) => { checkBoxChange(e) }} label={v.label} value={v.value} />);
+                        })}
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
+                return (
+                    newLocal_3
                 );
             } else if (value.type == "radio") {
-                return (
-                    <div key={"field-" + key}>
-                        <Form.Group ref={this.state.fields.fields[key]["actions"]} >
-                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            {
-                                Object.entries(value.options).map(([k, v]) => {
-                                    var checked = false;
-                                    if (value != null) {
-                                        if (value.value == v.value) {
-                                            checked = true;
-                                        }
-                                    }
-                                    return (<Form.Check type="radio" name={key} checked={checked} onChange={this.radioChange.bind(this)} label={v.label} value={v.value} />);
-                                })
+                const newLocal_2 = <div key={"field-" + key}>
+                    <Form.Group ref={fields.fields[key]["actions"]}>
+                        <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
+                        {Object.entries(value.options).map(([k, v]) => {
+                            var checked = false;
+                            if (value != null) {
+                                if (value.value == v.value) {
+                                    checked = true;
+                                }
                             }
-                            {this.fieldError(value.errors)}
-                        </Form.Group>
-                    </div>
+                            return (<Form.Check type="radio" name={key} checked={checked} onChange={this.radioChange.bind(this)} label={v.label} value={v.value} />);
+                        })}
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
+                return (
+                    newLocal_2
                 );
             } else if (value.type == "number") {
+                const newLocal_1 = <div key={"field-" + key}>
+                    <Form.Group>
+                        <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
+                        <InputGroup>
+                            {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
+                            <Form.Control
+                                ref={fields.fields[key]["actions"]}
+                                onChange={(e) => { change(e) }}
+                                readOnly={value.readOnly == true ? true : false}
+                                type={value.type}
+                                name={key}
+                                value={value.value != null ? value.value : ""}
+                                placeholder={value.placeholder != null && value.placeholder} />
+                            {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
+                        </InputGroup>
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
                 return (
-                    <div key={"field-" + key}>
-                        <Form.Group>
-                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            <InputGroup>
-                                {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
-                                <Form.Control
-                                    ref={this.state.fields.fields[key]["actions"]}
-                                    onChange={this.change.bind(this)}
-                                    readOnly={value.readOnly == true ? true : false}
-                                    type={value.type}
-                                    name={key}
-                                    value={value.value != null ? value.value : ""}
-                                    placeholder={value.placeholder != null && value.placeholder}
-                                />
-                                {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
-                            </InputGroup>
-                            {this.fieldError(value.errors)}
-                        </Form.Group>
-                    </div>
+                    newLocal_1
+                );
+            } else if (value.type == "email") {
+                const newLocalEmail = <div key={"field-" + key}>
+                    <Form.Group>
+                        <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
+                        <InputGroup>
+                            {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
+                            <Form.Control
+                                ref={fields.fields[key]["actions"]}
+                                onChange={(e) => { change(e) }}
+                                readOnly={value.readOnly == true ? true : false}
+                                type={value.type}
+                                name={key}
+                                value={value.value != null ? value.value : ""}
+                                placeholder={value.placeholder != null && value.placeholder} />
+                            {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
+                        </InputGroup>
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
+                return (
+                    newLocalEmail
                 );
             } else {
+                const newLocal = <div key={"field-" + key}>
+                    <Form.Group>
+                        <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
+                        <InputGroup>
+                            {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
+                            <Form.Control
+                                ref={fields.fields[key]["actions"]}
+                                onChange={(e) => { change(e) }}
+                                readOnly={value.readOnly == true ? true : false}
+                                type={value.type}
+                                name={key}
+                                value={value.value != null ? value.value : ""}
+                                placeholder={value.placeholder != null && value.placeholder} />
+                            {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
+                        </InputGroup>
+                        {fieldError(value.errors)}
+                    </Form.Group>
+                </div>;
                 return (
-                    <div key={"field-" + key}>
-                        <Form.Group>
-                            <Form.Label>{value.label} {this.requiredFieldStar(value)}</Form.Label>
-                            <InputGroup>
-                                {value.prefix && <InputGroup.Text id="basic-addon1">{value.prefix}</InputGroup.Text>}
-                                <Form.Control
-                                    ref={this.state.fields.fields[key]["actions"]}
-                                    onChange={this.change.bind(this)}
-                                    readOnly={value.readOnly == true ? true : false}
-                                    type={value.type}
-                                    name={key}
-                                    value={value.value != null ? value.value : ""}
-                                    placeholder={value.placeholder != null && value.placeholder}
-                                />
-                                {value.suffix && <InputGroup.Text id="basic-addon1">{value.suffix}</InputGroup.Text>}
-                            </InputGroup>
-                            {this.fieldError(value.errors)}
-                        </Form.Group>
-                    </div>
+                    newLocal
                 );
             }
         });
         return res;
     }
-    getFormData() {
-        var formData = new FormData();
-        Object.entries(this.state.fields.fields).map(([k, v]) => {
-            if (v.required == true) {
-                if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
-                    formData.append(k, v.value.value);
-                } else {
-                    formData.append(k, v.value);
-                }
-            } else {
-                if (v.value) {
-                    if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
-                        formData.append(k, v.value.value);
-                    } else {
-                        formData.append(k, v.value);
-                    }
-                }
-            }
-        });
-        return formData;
-    }
-    render() {
-        const res = this.getFields();
-        return (
-            <Form onSubmit={this.submit.bind(this)}>
-                {res}
-            </Form>
-        );
-    }
-
+    return <></>;
 }
-
 export default FormBuilder;
