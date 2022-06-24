@@ -17,7 +17,7 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
     const initActions = () => {
         var f = fields;
         f.submit = () => { submitCallBack() };
-        f.getFormData = () => { getFormData.bind(this) };
+        f.getFormData = () => { return getFormData() };
         if (getActions) {
             getActions(fields);
         }
@@ -52,7 +52,7 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
     }
 
     const getFormData = () => {
-        var formData = new FormData();;
+        var formData = new FormData();
         Object.entries(fields.fields).map(([k, v]) => {
             if (v.required == true) {
                 if (v.type == "select" || v.type == "checkbox" || v.type == "radio") {
