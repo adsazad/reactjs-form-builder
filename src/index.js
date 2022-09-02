@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useCallback,useState,createRef} from 'react';
 import { Form, Button, InputGroup } from "react-bootstrap";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
@@ -7,7 +7,7 @@ import axios from "axios"
 function FormBuilder({ fields, onChange, onSubmit, getActions }) {
 
 
-    const fchange = React.useCallback(() => {
+    const fchange = useCallback(() => {
         setFieldsS(fields);
     }, [fields]);
 
@@ -19,11 +19,11 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
             getActions(fields);
         }
     }
-    React.useEffect(() => {
+    useEffect(() => {
         initActions();
     }, []);
     const submitCallBack = () => {
-        console.log(fields);
+        // console.log(fields);
         validate();
     }
     const change = (e) => {
@@ -165,8 +165,8 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
 }
 
 function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
-    const [fields, setFields] = React.useState(fieldsProps);
-    React.useEffect(() => {
+    const [fields, setFields] = useState(fieldsProps);
+    useEffect(() => {
         setFields(fieldsProps);
     }, [fieldsProps]);
 
@@ -193,7 +193,7 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
     // }
     if (fields.fields) {
         const res = Object.entries(fields.fields).map(([key, value]) => {
-            fields.fields[key]["actions"] = React.createRef();
+            fields.fields[key]["actions"] = createRef();
             if (value.type == "textarea") {
                 return (
                     <div key={"field-" + key}>
