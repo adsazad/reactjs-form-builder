@@ -6,9 +6,6 @@ import axios from "axios"
 
 function FormBuilder({ fields, onChange, onSubmit, getActions }) {
 
-    React.useEffect(() => {
-        initActions();
-    }, []);
 
     const fchange = React.useCallback(() => {
         setFieldsS(fields);
@@ -22,6 +19,9 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
             getActions(fields);
         }
     }
+    React.useEffect(() => {
+        initActions();
+    }, []);
     const submitCallBack = () => {
         console.log(fields);
         validate();
