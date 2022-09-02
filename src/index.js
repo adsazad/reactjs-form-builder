@@ -7,9 +7,9 @@ import axios from "axios"
 function FormBuilder({ fields, onChange, onSubmit, getActions }) {
 
 
-    const fchange = useCallback(() => {
-        setFieldsS(fields);
-    }, [fields]);
+    // const fchange = useCallback(() => {
+    //     // setFieldsS(fields);
+    // }, [fields]);
 
     const initActions = () => {
         var f = fields;
