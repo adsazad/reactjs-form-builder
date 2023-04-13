@@ -1,4 +1,4 @@
-import React, { useCallback, useState, createRef } from 'react';
+import React, { useEffect, useCallback, useState, createRef } from 'react';
 import { Form, Button, InputGroup, Row, Col } from "react-bootstrap";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
@@ -19,7 +19,7 @@ function FormBuilder({ fields, onChange, onSubmit, getActions, rowDef }) {
             getActions(fields);
         }
     }
-    React.useEffect(() => {
+    useEffect(() => {
         initActions();
     }, []);
     const submitCallBack = () => {
