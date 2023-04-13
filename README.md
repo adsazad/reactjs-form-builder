@@ -77,6 +77,7 @@ class Example extends Component {
   }
   render() {
     return <FormBuilder
+      rowDef={{sm: 6}} // optional - to make the form in row. currently only col-sm is supported
       fields={this.state.form}
       onChange={this.onChange.bind(this)}
       onSubmit={this.onSubmit.bind(this)}
