@@ -1,10 +1,10 @@
-import React,{useEffect,useCallback,useState,createRef} from 'react';
-import { Form, Button, InputGroup } from "react-bootstrap";
+import React, { useEffect, useCallback, useState, createRef } from 'react';
+import { Form, Button, InputGroup, Row, Col } from "react-bootstrap";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import axios from "axios"
 
-function FormBuilder({ fields, onChange, onSubmit, getActions }) {
+function FormBuilder({ fields, onChange, onSubmit, getActions, rowDef }) {
 
 
     // const fchange = useCallback(() => {
@@ -27,7 +27,6 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
         validate();
     }
     const change = (e) => {
-        console.log("f");
         var f = fields;
         f.fields[e.target.name]['value'] = e.target.value;
         onChange(f);
@@ -74,7 +73,6 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
     }
     const validate = () => {
         var hasAnyErr = false;
-        console.log(fields);
         var f = fields;
         Object.entries(fields.fields).map(([key, value]) => {
             if (value.errors != null) {
@@ -157,14 +155,14 @@ function FormBuilder({ fields, onChange, onSubmit, getActions }) {
     }
     return (
         <Form onSubmit={(e) => { submit(e) }}>
-            <Fields masterChange={(f) => { onChange(f) }} fieldsProps={fields} checkBoxChange={(e) => { checkBoxChange(e) }} change={(c) => {
+            <Fields masterChange={(f) => { onChange(f) }} rowDef={rowDef} fieldsProps={fields} checkBoxChange={(e) => { checkBoxChange(e) }} change={(c) => {
                 change(c);
             }} />
         </Form>
     );
 }
 
-function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
+function Fields({ fieldsProps, change, checkBoxChange, masterChange, rowDef }) {
     const [fields, setFields] = useState(fieldsProps);
     useEffect(() => {
         setFields(fieldsProps);
@@ -192,10 +190,14 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
     //     }.bind(this);
     // }
     if (fields.fields) {
-        const res = Object.entries(fields.fields).map(([key, value]) => {
+        var isRow = false;
+        if (rowDef != null) {
+            isRow = true;
+        }
+        var res = Object.entries(fields.fields).map(([key, value]) => {
             fields.fields[key]["actions"] = createRef();
             if (value.type == "textarea") {
-                return (
+                const newLocal =
                     <div key={"field-" + key}>
                         <Form.Group>
                             <Form.Label>{value.label} {requiredFieldStar(value)}</Form.Label>
@@ -212,7 +214,12 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                             {fieldError(value.errors)}
                         </Form.Group>
                     </div>
-                );
+                    ;
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal}</Col>);
+                } else {
+                    return newLocal;
+                }
             } else if (value.type == "select") {
                 const newLocal = <div key={"field-" + key}>
                     <Form.Group>
@@ -254,9 +261,11 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocal
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal}</Col>);
+                } else {
+                    return newLocal;
+                }
             } else if (value.type == "file") {
                 const newLocal_4 = <div key={"field-" + key}>
 
@@ -268,11 +277,19 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocal_4
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal_4}</Col>);
+                } else {
+                    return newLocal_4;
+                }
             } else if (value.type == "submit") {
-                return (<Button type="submit" className={value.color}>{value.label}</Button>);
+                // return (<Button type="submit" className={value.color}>{value.label}</Button>);
+                var newLocal_5 = <Button type="submit" className={value.color}>{value.label}</Button>;
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal_5}</Col>);
+                } else {
+                    return newLocal_5;
+                }
             } else if (value.type == "checkbox") {
                 const newLocal_3 = <div key={"field-" + key}>
                     <Form.Group ref={fields.fields[key]["actions"]}>
@@ -291,9 +308,11 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocal_3
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal_3}</Col>);
+                } else {
+                    return newLocal_3;
+                }
             } else if (value.type == "radio") {
                 const newLocal_2 = <div key={"field-" + key}>
                     <Form.Group ref={fields.fields[key]["actions"]}>
@@ -310,9 +329,11 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocal_2
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal_2}</Col>);
+                } else {
+                    return newLocal_2;
+                }
             } else if (value.type == "number") {
                 const newLocal_1 = <div key={"field-" + key}>
                     <Form.Group>
@@ -332,9 +353,11 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocal_1
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal_1}</Col>);
+                } else {
+                    return newLocal_1;
+                }
             } else if (value.type == "email") {
                 const newLocalEmail = <div key={"field-" + key}>
                     <Form.Group>
@@ -354,9 +377,11 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocalEmail
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocalEmail}</Col>);
+                } else {
+                    return newLocalEmail;
+                }
             } else {
                 const newLocal = <div key={"field-" + key}>
                     <Form.Group>
@@ -376,11 +401,16 @@ function Fields({ fieldsProps, change, checkBoxChange, masterChange }) {
                         {fieldError(value.errors)}
                     </Form.Group>
                 </div>;
-                return (
-                    newLocal
-                );
+                if (isRow) {
+                    return (<Col sm={rowDef["sm"]} >{newLocal}</Col>);
+                } else {
+                    return newLocal;
+                }
             }
         });
+        if (isRow == true) {
+            res = <Row>{res}</Row>;
+        }
         return res;
     }
     return <></>;
