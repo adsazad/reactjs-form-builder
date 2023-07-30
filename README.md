@@ -106,8 +106,15 @@ once getAction is initiated you will have `actions` key in your field.
 
 Eg. to focus in field.
 ```jsx
-this.state.form.fields.yourtextfield.actions.focus();
+form.fields.yourtextfield.actions.focus();
 ```
+
+## Custom Submit Button
+To use custom submit button instead of the in inbuild submit button. Use
+```jsx
+form.submit();
+```
+this will trigger validation of form and onSubmit action.
 
 ## License
 
