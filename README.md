@@ -20,69 +20,68 @@ npm install --save reactjs-form-builder
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React from "react";
+import FormBuilder from "reactjs-form-builder";
 
-import FormBuilder from 'reactjs-form-builder'
+export default function Example(props) {
 
-class Example extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      form:{
-        "fields":{
-          "name":{
-            'label': "Product Name",
-            "type": "text",
-            "placeholder": "Custom Placeholder",
-            "required": true,
-            "requireMessage": "This Field is Required" // To customize message if field is empty
-          },
-          "description":{
-            'label': "Product Name",
-            "type": "textarea",
-            "required": true,
-          },
-          "categories": {
-             'label': "Categories",
-              "type": "select",
-              'options': [
-                {'label':"Apple", 'value':1},
-                {'label':"Banana", 'value':2}
-              ],
-              "placeholder": "Custom Placeholder",
-              "required": true,
-              "requireMessage": "This Field is Required"
-         },
-         'submit': {
-            "type": "submit",
-            "label": "Create Product",
-            'color:': 'btn-primary',
-          }
+    const [form, setForm] = useState({
+        fields: {
+            name: {
+                label: "Product Name",
+                type: "text",
+                placeholder: "Custom Placeholder",
+                required: true,
+                requireMessage: "This Field is Required" // To customize message if field is empty
+            },
+            description: {
+                label: "Product Name",
+                type: "textarea",
+                required: true,
+            },
+            categories: {
+                label: "Categories",
+                type: "select",
+                options: [
+                    { 'label': "Apple", 'value': 1 },
+                    { 'label': "Banana", 'value': 2 }
+                ],
+                placeholder: "Custom Placeholder",
+                required: true,
+                requireMessage: "This Field is Required"
+            },
+            submit: {
+                type: "submit",
+                label: "Create Product",
+                color: 'btn-primary',
+            }
         }
-      }
+    })
+
+    const submitAction = () => {
+        // To get FormData
+        var formData = form.getFormData();
+        
+        // To get value of specific field
+        var name = form.fields.name.value;
+        var description = form.fields.description.value;
+        
+        // Perform you action here
     };
-  }
-  onChange(data){
-    this.setState({
-      form: data
-    });
-  }
-  onSubmit(data){
-    this.setState({
-      form: data
-    });
-    var name = this.state.form.name.value;
-    var description = this.state.form.description.value;
-    var category = this.state.form.category.value; 
-  }
-  render() {
-    return <FormBuilder
-      rowDef={{sm: 6}} // optional - to make the form in row. currently only col-sm is supported
-      fields={this.state.form}
-      onChange={this.onChange.bind(this)}
-      onSubmit={this.onSubmit.bind(this)}
-    />
-  }
+
+    return (
+        <FormBuilder
+            rowDef={{sm: 6}} // optional - to make the form in row. currently only col-sm is supported
+            fields={form}
+            onChange={(data) => {
+                setForm({ ...data })
+            }}
+            onSubmit={(data) => {
+                setForm({ ...data })
+                submitAction();
+            }}
+        />
+    );
 }
 ```
 ## Actions
