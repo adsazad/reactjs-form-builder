@@ -95,8 +95,8 @@ getActions(data){
 render(){
   return (
   <FormBuilder
-  fields={this.state.form}
-  getActions={this.getActions.bind(this)}
+  fields={form}
+  getActions={(data)=>{setForm({...data})}
   />
   );
 }
