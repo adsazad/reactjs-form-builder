@@ -87,19 +87,12 @@ export default function Example(props) {
 ## Actions
 if you preform action like focusing onto field on component mount or other actions on field reference. add `getAction` prop in your FormBuilder Component.
 ```jsx
-getActions(data){
-  this.setState({
-    form: data,
-  });
-}
-render(){
-  return (
+return (
   <FormBuilder
-  fields={form}
-  getActions={(data)=>{setForm({...data})}
+    fields={form}
+    getActions={(data)=>{setForm({...data})}
   />
-  );
-}
+);
 ```
 getAction prop gives callback and return form state with actions.
 once getAction is initiated you will have `actions` key in your field.
